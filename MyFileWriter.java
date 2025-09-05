@@ -4,46 +4,28 @@ import java.nio.charset.StandardCharsets;
 
 public class MyFileWriter {
     public static void main(String[] args) {
-        String data = "Hello, World!";
-        String fileName1 = "example.txt";
-        String fileName2 = "example2.txt";
-        String fileName3 = "example3.txt";
-        String fileName4 = "example4.txt";
-        String fileName5 = "example5.txt";
+       
+        writeHiddenPass(".my_pass.txt", "the safest password:12345");
 
-        // 1. Using FileWriter
-        try (FileWriter writer = new FileWriter(fileName1)) {
-            writer.write(data);
+        writeInHiddenVault(".my_hidden_vault", "my_stuff.txt",
+                "pizza, dogs, Matthew");
+    }
+
+    static void writeHiddenPass(String filename, String contents) {
+        try (BufferedOutputStream writer =
+                 new BufferedOutputStream(new FileOutputStream(filename))) {
+            writer.write(contents.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        // 2. Using BufferedWriter
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName2))) {
-            bufferedWriter.write(data);
+    }
+    
+    static void writeInHiddenVault(String hiddenVault, String filename, String contents) {
+        File folder = new File(hiddenVault);
+        File file = new File(folder, filename);
+        try (BufferedOutputStream writer =
+            new BufferedOutputStream(new FileOutputStream(file))) {
+            writer.write(contents.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 3. Using FileOutputStream
-        try (FileOutputStream outputStream = new FileOutputStream(fileName3)) {
-            outputStream.write(data.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 4. Using BufferedOutputStream
-        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fileName4))) {
-            bufferedOutputStream.write(data.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 5. Using Files (java.nio.file)
-        try {
-            Files.write(Paths.get(fileName5), data.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
