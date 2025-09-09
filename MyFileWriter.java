@@ -28,4 +28,9 @@ public class MyFileWriter {
         } catch (IOException e) {
         }
     }
+
+    public static void printFileSize(String fileName) {
+        File f = new File(fileName);
+        System.out.println(f.length());
+    }
 }
