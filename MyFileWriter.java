@@ -33,4 +33,9 @@ public class MyFileWriter {
         File f = new File(fileName);
         System.out.println(f.length());
     }
+
+    private static void toString(String fileName) {
+        File f = new File(fileName);
+        System.out.println(f.toString());
+    }
 }
