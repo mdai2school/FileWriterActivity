@@ -1,15 +1,12 @@
 import java.io.*;
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 
 public class MyFileWriter {
-    public static void main(String[] args) {
-       
-        writeHiddenPass(".my_pass.txt", "the safest password:12345");
-
-        writeInHiddenVault(".my_hidden_vault", "my_stuff.txt",
-                "pizza, dogs, Matthew");
-    }
 
     static void writeHiddenPass(String filename, String contents) {
         try (BufferedOutputStream writer =
@@ -43,5 +40,43 @@ public class MyFileWriter {
     private static void toString(String fileName) {
         File f = new File(fileName);
         System.out.println(f.toString());
+    }
+
+    // help from geeksforgeeks.com:https://www.geeksforgeeks.org/java/sha-256-hash-in-java
+    private static String toHexString(byte[] hash) {
+        BigInteger number = new BigInteger(1, hash);
+        StringBuilder hexString = new StringBuilder(number.toString(16));
+        while (hexString.length() < 64) {
+            hexString.insert(0, '0');
+        }
+        return hexString.toString();
+    }
+
+    private static String hashFile(String path) {
+        try {
+            byte[] data = Files.readAllBytes(Paths.get(path));
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            return toHexString(md.digest(data));
+        } catch (NoSuchFileException e) {
+            System.err.println("File not found: " + path);
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("SHA-256 not available");
+        } catch (java.io.IOException e) {
+            System.err.println("I/O error: " + e.getMessage());
+        }
+        return null;
+    }
+
+
+
+    public static void main(String[] args) {
+       
+        writeHiddenPass(".my_pass.txt", "the safest password:12345");
+
+        writeInHiddenVault(".my_hidden_vault", "my_stuff.txt",
+                "pizza, dogs, Matthew");
+
+        // printFileSize("test.txt");
+        // printFileSize("test1.txt");
     }
 }
