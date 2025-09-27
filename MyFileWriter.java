@@ -52,7 +52,7 @@ public class MyFileWriter {
         return hexString.toString();
     }
 
-    private static String hashFile(String path) {
+    public static String hashFile(String path) {
         try {
             byte[] data = Files.readAllBytes(Paths.get(path));
             MessageDigest md = MessageDigest.getInstance("SHA-256");
